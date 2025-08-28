@@ -83,16 +83,18 @@ def plot2D(fun, minx, maxx, miny, maxy, stepf, stepquiver):
     fig.colorbar(surf, shrink=0.5, aspect=5)
     
 
+def f(x):
+    return x**3 + 2*x**2 - x
 
-def f( x ):
-    return x**3 + 2*x**2 -x
-
-plot1D(f,-3,3,0.1,0.5,4)
-
-def g( x,y ):
-    R = th.sqrt((0.75*x)**2+y**2 + 0.01)
+def g(x, y):
+    R = th.sqrt((0.75*x)**2 + y**2 + 0.01)
     Z = th.sin(R)
     return Z
 
-plot2D( g, -5,5.1,-5, 5.1 ,0.25,1.0)
+plt.style.use('default')
+
+plot1D(f, -3, 3, 0.1, 0.5, 4)
+plot2D(g, -5, 5.1, -5, 5.1, 0.25, 1.0)
+
+plt.tight_layout()
 plt.show()
