@@ -21,7 +21,7 @@ You can find alternative gradient visualizations on the [Wikipedia gradient page
 
 ### 1D Function: f(x) = x³ + 2x² - x
 
-![1D Gradient Visualization](path/to/1d_example.png)
+![1D Gradient Visualization]([https://github.com/philippdubach/torch-gradients/blob/5f5d1aca111e70a72f1e4646abbadbed5a90386d/Figure_1.png)
 
 *The blue curve shows the function value. Red arrows show the gradient at each point - note how they live on the x-axis (input space), not along the curve. Arrow length indicates the magnitude of the slope.*
 
