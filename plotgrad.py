@@ -4,21 +4,33 @@ import torch as th
 from matplotlib import cm
 
 
-def plot1D( fun, minx, maxx,stepf, stepquiver, clipq ):
+def plot1D(fun, minx, maxx, stepf, stepquiver, clipq):
+    # Create gradient function
+    def gf(x):
+        x_tensor = th.tensor(x, requires_grad=True)
+        y = fun(x_tensor)
+        y.backward()
+        return x_tensor.grad
     
-    gf = th.func.grad(fun)
-    x = np.arange(minx,maxx,stepf)
-
-    y = fun(x)
-
-    xx = np.arange(minx,maxx,stepquiver)
-    x0,y0 = np.meshgrid(xx,0)
-    v = 0
-    u = np.array([ th.clip( gf( th.tensor(xi)),-clipq,clipq).numpy() for xi in xx ])
-
-    plt.plot(x,y)
-
-    plt.quiver(x0,y0,u,v)
+    # Plot function
+    x = np.arange(minx, maxx, stepf)
+    y = [fun(th.tensor(xi)).item() for xi in x]
+    
+    # Plot gradient vectors
+    xx = np.arange(minx, maxx, stepquiver)
+    x0 = xx
+    y0 = np.zeros_like(xx)
+    v = np.zeros_like(xx)
+    u = np.array([th.clip(gf(xi), -clipq, clipq).item() for xi in xx])
+    
+    plt.figure(figsize=(10, 6))
+    plt.plot(x, y, 'b-', linewidth=2, label='Function')
+    plt.quiver(x0, y0, u, v, angles='xy', scale_units='xy', scale=1, color='red', alpha=0.7)
+    plt.grid(True, alpha=0.3)
+    plt.xlabel('x')
+    plt.ylabel('f(x)')
+    plt.title('1D Function with Gradient Vectors')
+    plt.legend()
 
 
 
