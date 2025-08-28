@@ -27,7 +27,7 @@ You can find alternative gradient visualizations on the [Wikipedia gradient page
 
 ### 2D Function: f(x,y) = sin(√((0.75x)² + y² + 0.01))
 
-![2D Gradient Visualization](path/to/2d_example.png)
+![Figure1](/Figure_2.png)
 
 *The colored surface shows function values. Black arrows show gradient vectors in the input plane (x-y space), pointing toward the direction of steepest ascent.*
 
