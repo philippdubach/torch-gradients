@@ -29,43 +29,58 @@ def plot1D(fun, minx, maxx, stepf, stepquiver, clipq):
     plt.grid(True, alpha=0.3)
     plt.xlabel('x')
     plt.ylabel('f(x)')
-    plt.title('1D Function with Gradient Vectors')
     plt.legend()
 
 
-
-
-def plot2D( fun, minx,maxx, miny,maxy,stepf,stepquiver ):
+def plot2D(fun, minx, maxx, miny, maxy, stepf, stepquiver):
+    # Create mesh for function evaluation
     XX = np.arange(minx, maxx, stepf)
     YY = np.arange(miny, maxy, stepf)
     X, Y = np.meshgrid(XX, YY)
-
-    Z = fun( th.tensor(X),th.tensor(Y) ).numpy()
-
+    
+    # Evaluate function
+    Z = np.zeros_like(X)
+    for i in range(X.shape[0]):
+        for j in range(X.shape[1]):
+            Z[i, j] = fun(th.tensor(X[i, j]), th.tensor(Y[i, j])).item()
+    
+    # Create mesh for gradient vectors
     XX2 = np.arange(minx, maxx, stepquiver)
     YY2 = np.arange(miny, maxy, stepquiver)
-    gradg = th.func.grad(fun,(0,1))
-
-    gg = [ gradg(th.tensor(xi),th.tensor(yi)) for yi in YY2 for xi in XX2 ]
-
-    rshpgg = np.reshape( np.array( [ ( x.numpy(),y.numpy()) for x,y in gg]), (YY2.shape[0],XX2.shape[0],2))
-
-    fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
-    # Plot the surface.
-
-
-    x, y, z = np.meshgrid(XX2,
-                        YY2,
-                        0)
-    u = rshpgg[:,:,0:1]
-    v = rshpgg[:,:,1:2]
-    w = 0
-
+    X2, Y2 = np.meshgrid(XX2, YY2)
     
-
-
-    surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm,linewidth=0, antialiased=False, alpha=0.5)
-    ax.quiver(x,y,z,u,v,w, color = 'black')
+    # Compute gradients
+    U = np.zeros_like(X2)
+    V = np.zeros_like(Y2)
+    
+    for i in range(X2.shape[0]):
+        for j in range(X2.shape[1]):
+            x_val = th.tensor(X2[i, j], requires_grad=True)
+            y_val = th.tensor(Y2[i, j], requires_grad=True)
+            z_val = fun(x_val, y_val)
+            z_val.backward()
+            U[i, j] = x_val.grad.item()
+            V[i, j] = y_val.grad.item()
+    
+    # Create 3D plot
+    fig = plt.figure(figsize=(12, 8))
+    ax = fig.add_subplot(111, projection='3d')
+    
+    # Plot surface
+    surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, 
+                          linewidth=0, antialiased=False, alpha=0.6)
+    
+    # Plot gradient vectors
+    Z2 = np.zeros_like(X2)  # Place vectors at z=0 for clarity
+    ax.quiver(X2, Y2, Z2, U, V, np.zeros_like(U), 
+              color='black', alpha=0.8, length=0.3, normalize=True)
+    
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    
+    # Add colorbar
+    fig.colorbar(surf, shrink=0.5, aspect=5)
     
 
 
