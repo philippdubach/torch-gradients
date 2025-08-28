@@ -19,13 +19,13 @@ You can find alternative gradient visualizations on the [Wikipedia gradient page
 
 ## Examples
 
-### 1D Function: f(x) = x³ + 2x² - x
+1D Function: f(x) = x³ + 2x² - x
 
 ![Figure1](/Figure_1.png)
 
 *The blue curve shows the function value. Red arrows show the gradient at each point - note how they live on the x-axis (input space), not along the curve. Arrow length indicates the magnitude of the slope.*
 
-### 2D Function: f(x,y) = sin(√((0.75x)² + y² + 0.01))
+2D Function: f(x,y) = sin(√((0.75x)² + y² + 0.01))
 
 ![Figure1](/Figure_2.png)
 
